@@ -9,87 +9,12 @@ class Oficer extends CI_Controller {
     $manager_data = $this->queries->get_manager_data($empl_id);
     $comp_id = $manager_data->comp_id;
     $blanch_id = $manager_data->blanch_id;
-    
-    $loan_pending = $this->queries->get_totalPendingBlanch($blanch_id);
-    $total_disbursed = $this->queries->get_SumDisbarsedLoanBlanch($blanch_id);
-    $total_withdrawal =$this->queries->get_total_withdrawal_today_blanch($blanch_id);
-    $total_disbrse = $this->queries->get_sum_loanDisbursed_blanch($blanch_id);
-    $total_loanwithdraw = $this->queries->get_loan_withdrawal_today_blanch($blanch_id);
-    $pending_total = $this->queries->LoanPendingBlanchSum($blanch_id);
-    $leojumla = $this->queries->get_depositing_hai_blanch($blanch_id);
-    $total_active = $this->queries->get_total_today_deposit($blanch_id);
-    $deposit_out = $this->queries->get_total_deposit_out($blanch_id);
-    $total_deducted = $this->queries->get_today_deducted_feeblanch($blanch_id);
-    $total_receved = $this->queries->get_sum_incomeBlanchData($blanch_id);
-    $total_pending = $this->queries->get_total_pend_loan($blanch_id);
-   $defaulter =$this->queries->getOutstandingLoans($blanch_id);
-   
-    $sugu_wateja = $this->queries->get_depositing_sugu_blanch($blanch_id);
-   
-    // echo "<pre>";
-    //        print_r( $defaulter);
-    //              exit();
 
-	$this->load->view('oficer/index',['manager_data'=>$manager_data , 'loan_pending' => $loan_pending, 'total_disbursed' => $total_disbursed,
-'total_withdrawal' => $total_withdrawal, 'total_disbrse' => $total_disbrse,'total_loanwithdraw' =>  $total_loanwithdraw, 'pending_total' => $pending_total,
-'leojumla' => $leojumla, 'total_active' => $total_active , 'deposit_out'=> $deposit_out,'total_deducted'=>$total_deducted,
-'total_receved' => $total_receved, 'total_pending' => $total_pending
-]);
+    // print_r($manager_data);
+    //    exit();
+
+	$this->load->view('oficer/index',['manager_data'=>$manager_data]);
 	}
-
-  public function leo()
-  {
-    $this->load->model('queries');
-    $blanch_id = $this->session->userdata('blanch_id');
-    $empl_id = $this->session->userdata('empl_id');
-    $todays=$this->queries->get_depositing_hai_branch($blanch_id);
-      //  echo "<pre>";
-      //      print_r($leo);
-      //            exit();
-    $this->load->view('oficer/leo',['todays'=>$todays]);
-
-  }
-
-  public function madeni()
-  {
-    $this->load->model('queries');
-    $blanch_id = $this->session->userdata('blanch_id');
-    $empl_id = $this->session->userdata('empl_id');
-    $defaults = $this->queries->get_depositing_out_blanch($blanch_id);
-
-      //  echo "<pre>";
-      //      print_r($leo);
-      //            exit();
-    $this->load->view('oficer/madeni',['defaults'=> $defaults ]);
-
-  }
-
-
-  public function faini()
-  {
-    $this->load->model('queries');
-    $blanch_id = $this->session->userdata('blanch_id');
-    $empl_id = $this->session->userdata('empl_id');
-    $manager_data = $this->queries->get_manager_data($empl_id);
-    $comp_id = $manager_data->comp_id;
-    $company_data = $this->queries->get_companyData($comp_id);
-    $blanch_data = $this->queries->get_blanchData($blanch_id);
-    $empl_data = $this->queries->get_employee_data($empl_id);
-
-   $income = $this->queries->get_income($comp_id);
-   $detail_income = $this->queries->get_income_detailBlanchData($blanch_id);
-   $total_receved = $this->queries->get_sum_incomeBlanchData($blanch_id);
-   $customer = $this->queries->get_allcutomerblanchData($blanch_id);
-   
-    // echo "<pre>";
-    //   print_r($detail_income);
-    //         exit();
-   $this->load->view('oficer/faini',['income'=>$income,'detail_income'=>$detail_income,'total_receved'=>$total_receved,'customer'=>$customer,'empl_data'=>$empl_data]);
-    
-
-  }
-
-  
 
 
     public function setting(){
@@ -183,9 +108,9 @@ class Oficer extends CI_Controller {
         $total_receved = $this->queries->get_sum_incomeBlanchData($blanch_id);
         $customer = $this->queries->get_allcutomerblanchData($blanch_id);
         
-        //  echo "<pre>";
-        //    print_r($total_receved);
-        //          exit();
+         // echo "<pre>";
+         //   print_r($detail_income);
+         //         exit();
         $this->load->view('oficer/income_dashboard',['income'=>$income,'detail_income'=>$detail_income,'total_receved'=>$total_receved,'customer'=>$customer,'empl_data'=>$empl_data]);
     }
 
@@ -391,7 +316,7 @@ return true;
         $to = $this->input->post('to');
         $blanch_id = $this->input->post('blanch_id');
         $comp_id = $this->input->post('comp_id');
-        $data = $this->queries->get_previous_income_all($from,$to,$comp_id,$blanch_id);
+        $data = $this->queries->get_previous_income($from,$to,$comp_id,$blanch_id);
         $sum_income = $this->queries->get_sum_previousIncome($from,$to,$comp_id,$blanch_id);
 
           //   echo "<pre>";
@@ -399,48 +324,6 @@ return true;
           //     exit();
         $this->load->view('oficer/previous_income',['data'=>$data,'sum_income'=>$sum_income,'from'=>$from,'to'=>$to,'comp_id'=>$comp_id,'blanch_id'=>$blanch_id,'blanch'=>$blanch,'empl_data'=>$empl_data]);
     }
-
-    public function print_faini($from, $to, $blanch_id)
-    {
-        $this->load->model('queries');
-        $blanch_id = $this->session->userdata('blanch_id'); // Check if this overwrite is intentional
-        $empl_id = $this->session->userdata('empl_id');
-    
-        $manager_data = $this->queries->get_manager_data($empl_id);
-        $comp_id = $manager_data->comp_id;
-        $company_data = $this->queries->get_companyData($comp_id);
-        $blanch_data = $this->queries->get_blanchData($blanch_id);
-        $empl_data = $this->queries->get_employee_data($empl_id);
-    
-        $datas = $this->queries->get_previous_income_all($from, $to, $comp_id, $blanch_id);
-        $sum_income = $this->queries->get_sum_previousIncome($from,$to,$comp_id,$blanch_id);
-      //  echo "<pre>";
-      //     print_r($sum_income);
-      //         exit();
-        // PDF Generation
-        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L', 'orientation' => 'L']);
-        $html = $this->load->view('oficer/print_faini', [
-            'datas' => $datas,
-            'sum_income' => $sum_income,
-            'blanch_id' => $blanch_id,
-            'from' => $from,
-            'to' => $to,
-            'blanch_data' => $blanch_data,
-            'company_data' => $company_data
-        ], true);
-    
-        $mpdf->SetFooter('Generated By James 0629364847/0747384847');
-        $mpdf->SetWatermarkText($company_data->comp_name ?? ''); // Ensure company name is set
-        $mpdf->showWatermarkText = true;
-    
-        $date = date("Y-m-d");
-        $filename = "faini_{$date}.pdf";
-        $mpdf->WriteHTML($html);
-        $mpdf->Output($filename, 'I'); // Output the file to the browser
-    }
-    
-    
-    
 
 
 
@@ -1569,7 +1452,7 @@ public function modify_sponser($sp_id,$customer_id){
         $loan_pending = $this->queries->get_loanPendingBlanch($blanch_id);
         $total_request = $this->queries->get_total_loanPendingBlanch($blanch_id);
             //     echo "<pre>";
-            // print_r($loan_pending );
+            // print_r($loan_pending);
             //     echo "<pre>";
             //         exit();
     	$this->load->view('oficer/loan_pending',['loan_pending'=>$loan_pending,'total_request'=>$total_request]);
@@ -3140,9 +3023,9 @@ public function insert_blanch_principal($comp_id,$blanch_id,$trans_id,$princ_sta
 
        $today_recevable = $this->queries->get_today_receivable($blanch_id);
 
-      //           echo "<pre>";
-      //  print_r($today_deposit);
-      //       exit();
+       //          echo "<pre>";
+       // print_r($today_recevable);
+       //      exit();
 
       $today_deducted = $this->queries->get_today_income_deducted($blanch_id);
       $deducted_today = $today_deducted->total_deducted_data;
@@ -3901,7 +3784,7 @@ public function cash_transaction(){
     $hai_wateja = $this->queries->get_depositing_hai_blanch($blanch_id);
     $sugu_wateja = $this->queries->get_depositing_sugu_blanch($blanch_id);
     //        echo "<pre>";
-    // print_r($sugu_wateja);
+    // print_r($sum_cashTransaction);
     //            exit();
 
     $this->load->view('oficer/cash_transaction',['empl_data'=>$empl_data,'cash_transaction'=>$cash_transaction,'sum_cashTransaction'=>$sum_cashTransaction,'account_deposit'=>$account_deposit,'default_list'=>$default_list,'toyal_default'=>$toyal_default,'withdrawal_account'=>$withdrawal_account,'total_code_no'=>$total_code_no,'deducted_fee'=>$deducted_fee,'penart_paid'=>$penart_paid,'miamala'=>$miamala,'total_miamala'=>$total_miamala,'hai_wateja'=>$hai_wateja,'sugu_wateja'=>$sugu_wateja]);
@@ -3948,8 +3831,6 @@ public function filter_cashTransaction(){
     //        exit();
     $this->load->view('oficer/prev_cash',['empl_data'=>$empl_data,'from'=>$from,'to'=>$to,'cash'=>$cash,'total_comp_data'=>$total_comp_data,'account_deposit'=>$account_deposit,'default_list'=>$default_list,'toyal_default'=>$toyal_default,'withdrawal_account'=>$withdrawal_account,'total_code_no'=>$total_code_no,'deducted_fee'=>$deducted_fee,'penart_paid'=>$penart_paid,'miamala'=>$miamala,'total_miamala'=>$total_miamala,'blanch_id'=>$blanch_id,'blanch_data'=>$blanch_data,'hai_wateja'=>$hai_wateja,'sugu_wateja'=>$sugu_wateja]);
 }
-
-
 
  public function print_cashBlanch($from,$to,$blanch_id){
     $this->load->model('queries');
@@ -4585,7 +4466,7 @@ public function loan_pending_time(){
     $loan_pend = $this->queries->get_pending_reportLoanblanch($blanch_id);
     $pend = $this->queries->get_sun_loanPendingBlanch($blanch_id);
     //      echo "<pre>";
-    // print_r($new_total_pending);
+    // print_r($pend);
     //       exit();
 
     $this->load->view('oficer/loan_pending_time',['empl_data'=>$empl_data,'loan_pending_new'=>$loan_pending_new,'new_total_pending'=>$new_total_pending,'loan_pend'=>$loan_pend,'pend'=>$pend]);
@@ -5406,11 +5287,11 @@ public function deposit_loan_saving(){
 public function sendsms($phone,$massage){
     //$phone = '0753871034';
     //$sms = 'mapenzi yanauwa';
-    $api_key = 'swSKjIvMJOdSpyd4';
+    $api_key = 'gG1FSMH1SvFWGutz7XukCSu9.n';
     //$api_key = 'qFzd89PXu1e/DuwbwxOE5uUBn6';
     //$curl = curl_init();
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL,"https://galadove.loan-pocket.com/api/v1/receive/action/send/sms");
+curl_setopt($ch, CURLOPT_URL,"https://galadove.mikoposoft.com/api/v1/receive/action/send/sms");
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS,
             'apiKey='.$api_key.'&phoneNumber='.$phone.'&messageContent='.$massage);

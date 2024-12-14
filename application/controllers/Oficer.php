@@ -675,86 +675,79 @@ return true;
 
 
 
-      public function create_customer(){
-        // Set form validation rules
-        $this->form_validation->set_rules('comp_id', 'Company', 'required');
-        $this->form_validation->set_rules('blanch_id', 'Branch', 'required');
-        $this->form_validation->set_rules('f_name', 'First name', 'required');
-        $this->form_validation->set_rules('m_name', 'Middle name', 'required');
-        $this->form_validation->set_rules('l_name', 'Last name', 'required');
-        $this->form_validation->set_rules('gender', 'Gender', 'required');
-        $this->form_validation->set_rules('date_birth', 'Date of Birth', 'required');
-        $this->form_validation->set_rules('phone_no', 'Phone Number', 'required');
-        $this->form_validation->set_rules('region_id', 'Region', 'required');
-        $this->form_validation->set_rules('district', 'District', 'required');
-        $this->form_validation->set_rules('ward', 'Ward', 'required');
-        $this->form_validation->set_rules('street', 'Street', 'required');
-        $this->form_validation->set_rules('age', 'Age', 'required');
-        $this->form_validation->set_rules('reg_date', 'Registration Date', 'required');
-        $this->form_validation->set_rules('empl_id', 'Employee', 'required');
-        $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
-    
-        // Run form validation
+     public function create_customer(){
+        $this->form_validation->set_rules('comp_id','company','required');
+        $this->form_validation->set_rules('blanch_id','blanch','required');
+        $this->form_validation->set_rules('f_name','First name','required');
+        $this->form_validation->set_rules('m_name','Middle name','required');
+        $this->form_validation->set_rules('l_name','Last name','required');
+        $this->form_validation->set_rules('gender','gender','required');
+        $this->form_validation->set_rules('date_birth','date_birth','required');
+        $this->form_validation->set_rules('phone_no','phone number','required');
+        $this->form_validation->set_rules('region_id','region','required');
+        $this->form_validation->set_rules('district','district','required');
+        $this->form_validation->set_rules('ward','ward','required');
+        $this->form_validation->set_rules('street','street','required');
+        $this->form_validation->set_rules('age','age','required');
+        $this->form_validation->set_rules('reg_date','reg_date','required');
+        $this->form_validation->set_rules('empl_id','Employee','required');
+        $this->form_validation->set_error_delimiters('<div class="text-danger">','</div>');
         if ($this->form_validation->run()) {
-            // Capture posted form data
             $data = $this->input->post();
-            $f_name = $data['f_name'];
-            $m_name = $data['m_name'];
-            $l_name = $data['l_name'];
-            $comp_id = $data['comp_id'];
-            $blanch_id = $data['blanch_id'];
-            $gender = $data['gender'];
-            $district = $data['district'];
-            $region_id = $data['region_id'];
-            $date_birth = $data['date_birth'];
-            $ward = $data['ward'];
-            $street = $data['street'];
-            $age = $data['age'];
-            $empl_id = $data['empl_id'];
-            $phone = $data['phone_no'];
-            $date_reg = $data['reg_date'];
-    
-            // Adding country code to phone number
-            $phone = '255' . $phone;
-    
-            // Load model for checking if customer exists
-            $this->load->model('queries');
-            $check = $this->queries->check_name($f_name, $m_name, $l_name, $phone);
-    
-            // If customer already exists
-            if ($check == TRUE) {
-                $this->session->set_flashdata('error', 'This customer is already registered.');
-                return redirect('oficer/customer');
-            } elseif ($check == FALSE) {
-                // Insert customer details
-                $date = date("Y-m-d");
-                $customer_id = $this->insert_customer_detail($comp_id, $blanch_id, $empl_id, $f_name, $m_name, $l_name, $gender, $date_birth, $age, $phone, $region_id, $district, $ward, $street, $date_reg);
-    
-                // Generate customer number based on customer ID and date
-                $number = 'C' . substr($date, 0, 4) . substr($date, 5, 2) . $customer_id;
-                $this->update_customer_number($customer_id, $number);
-                
-                // Insert additional customer data if necessary
-                $this->insert_sub_customer_data($customer_id);
-    
-                // Check if customer ID is valid and redirect accordingly
-                if ($customer_id > 0) {
-                    $this->session->set_flashdata('message', 'Customer successfully registered.');
-                    return redirect('oficer/customer_details/' . $customer_id);
-                } else {
-                    // If insertion failed, show an error message
-                    $this->session->set_flashdata('error', 'Failed to insert customer.');
-                    return redirect('oficer/customer');
+             $f_name = $data['f_name'];
+             $m_name = $data['m_name'];
+             $l_name = $data['l_name'];
+             $comp_id = $data['comp_id'];
+             $blanch_id = $data['blanch_id'];
+             $gender = $data['gender'];
+             $district = $data['district'];
+             $region_id = $data['region_id'];
+             $date_birth = $data['date_birth'];
+             $ward = $data['ward'];
+             $street = $data['street'];
+             $age = $data['age'];
+             $empl_id = $data['empl_id'];
+             $phone = $data['phone_no'];
+             $date_reg = $data['reg_date'];
+             $phone = '255'.$phone;
+
+              // print_r($phone);
+              //     exit();
+
+             $this->load->model('queries');
+             $check = $this->queries->check_name($f_name,$m_name,$l_name,$phone);
+             if ($check == TRUE) {
+             $this->session->set_flashdata('error','This customer Aledy Registered');
+              return redirect('oficer/customer');
+             }elseif($check == FALSE){
+              $date = date("Y-m-d");
+             $customer_id = $customer_id = $this->insert_customer_detail($comp_id,$blanch_id,$empl_id,$f_name,$m_name,$l_name,$gender,$date_birth,$age,$phone,$region_id,$district,$ward,$street,$date_reg);;
+             $number = 'C'.substr($date ,0, 4).substr($date ,5, 2).$customer_id;
+             $this->update_customer_number($customer_id,$number);
+             $this->insert_sub_customer_data($customer_id);
+                //print_r($customer_id);
+                 //exit();
+             if ($customer_id > 0){
+                    $this->session->set_flashdata('massage','');
+             }else{
+                    $this->session->set_flashdata('error','');
                 }
-            }
+            return redirect('oficer/customer_details/'.$customer_id);
+             }
+                  //      echo "<pre>";
+                  // print_r($check);
+                          //exit();
+             }
+             $this->customer_details();
         }
-    
-        // If validation fails, reload the customer details page
-        $this->customer_details();
-    }
-    
-  
-    
+
+
+    public function insert_customer_detail($comp_id,$blanch_id,$empl_id,$f_name,$m_name,$l_name,$gender,$date_birth,$age,$phone,$region_id,$district,$ward,$street,$date_reg){
+     $this->db->query("INSERT INTO   tbl_customer (`comp_id`,`blanch_id`,`empl_id`,`f_name`,`m_name`,`l_name`,`gender`,`date_birth`,`age`,`phone_no`,`region_id`,`district`,`ward`,`street`,`reg_date`) 
+      VALUES ('$comp_id','$blanch_id','$empl_id','$f_name','$m_name','$l_name','$gender','$date_birth','$age','$phone','$region_id','$district','$ward','$street','$date_reg')");
+     return $this->db->insert_id();
+     }
+
 
         public function update_customer_number($customer_id,$number){
         $sqldata="UPDATE `tbl_customer` SET `customer_code`= '$number',`customer_status`='pending' WHERE `customer_id`= '$customer_id'";
@@ -5413,7 +5406,7 @@ public function deposit_loan_saving(){
 public function sendsms($phone,$massage){
     //$phone = '0753871034';
     //$sms = 'mapenzi yanauwa';
-    $api_key = 'xSKeO4Zh1V.EIhUObUOaImVEhR';
+    $api_key = 'swSKjIvMJOdSpyd4';
     //$api_key = 'qFzd89PXu1e/DuwbwxOE5uUBn6';
     //$curl = curl_init();
 $ch = curl_init();

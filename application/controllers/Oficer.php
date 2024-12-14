@@ -753,37 +753,7 @@ return true;
         $this->customer_details();
     }
     
-    // Insert customer details into the database and return the customer ID
-    public function insert_customer_detail($comp_id, $blanch_id, $empl_id, $f_name, $m_name, $l_name, $gender, $date_birth, $age, $phone, $region_id, $district, $ward, $street, $date_reg) {
-        // Prepare the data for insertion
-        $data = [
-            'comp_id' => $comp_id,
-            'blanch_id' => $blanch_id,
-            'empl_id' => $empl_id,
-            'f_name' => $f_name,
-            'm_name' => $m_name,
-            'l_name' => $l_name,
-            'gender' => $gender,
-            'date_birth' => $date_birth,
-            'age' => $age,
-            'phone_no' => $phone,
-            'region_id' => $region_id,
-            'district' => $district,
-            'ward' => $ward,
-            'street' => $street,
-            'reg_date' => $date_reg,
-        ];
-    
-        // Insert the customer record into the database
-        $this->db->insert('tbl_customer', $data);
-    
-        // Check if the insert was successful and return the customer ID
-        if ($this->db->affected_rows() > 0) {
-            return $this->db->insert_id(); // Return the ID of the newly inserted record
-        } else {
-            return 0; // Return 0 if insertion failed
-        }
-    }
+  
     
 
         public function update_customer_number($customer_id,$number){
